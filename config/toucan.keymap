@@ -16,7 +16,7 @@
         compatible = "zmk,combos";
 
         GAME {
-            bindings = <&to 4>;
+            bindings = <&to 5>;
             key-positions = <3 13 14 16>;
         };
 
@@ -57,7 +57,27 @@
 &kp GRAVE     &kp B  &kp L  &kp D       &kp C                                 &kp V                        &kp J        &kp Y        &kp O    &kp U     &kp COMMA  &kp BACKSLASH
 &kp LCTRL     &kp N  &kp R  &kp T       &kp S                                 &kp G                        &kp P        &kp H        &kp A    &kp E     &kp I      &kp MINUS
 &kp LEFT_ALT  &kp X  &kp Q  &kp M       &kp W                                 &kp Z                        &kp K        &kp F        &kp SQT  &kp SEMI  &kp DOT    &kp SLASH
-                            &kp ESCAPE  &hold_preferred LEFT_SHIFT BACKSPACE  &hold_preferred LWIN DELETE  &lt 2 ENTER  &lt 1 SPACE  &kp TAB
+                            &kp ESCAPE  &hold_preferred LEFT_SHIFT BACKSPACE  &hold_preferred LWIN DELETE  &lt 4 ENTER  &lt 3 SPACE  &kp TAB
+            >;
+        };
+
+        PAD {
+            display-name = "PAD";
+            bindings = <
+&trans  &trans  &trans    &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &mo 2   &mkp MB3  &mkp MB2  &mkp MB1  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans    &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                          &trans    &trans    &trans  &trans  &trans  &trans
+            >;
+        };
+
+        SLOW {
+            display-name = "SLOW";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                        &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
@@ -81,33 +101,13 @@
             >;
         };
 
-        PAD {
-            display-name = "PAD";
-            bindings = <
-&trans  &trans  &trans    &trans    &trans    &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &mo 5   &mkp MB3  &mkp MB2  &mkp MB1  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans    &trans    &trans    &trans      &trans  &trans  &trans  &trans  &trans  &trans
-                          &trans    &trans    &trans      &trans  &trans  &trans
-            >;
-        };
-
         GAME {
             display-name = "GAME";
             bindings = <
 &kp ESCAPE    &kp B  &kp L  &kp D     &kp C      &kp V      &kp J        &kp Y        &kp O    &kp U     &kp COMMA  &kp BACKSLASH
 &kp LCTRL     &kp N  &kp R  &kp T     &kp S      &kp G      &kp P        &kp H        &kp A    &kp E     &kp I      &kp MINUS
 &kp LEFT_ALT  &kp X  &kp Q  &kp M     &kp W      &kp Z      &kp K        &kp F        &kp SQT  &kp SEMI  &kp DOT    &kp SLASH
-                            &kp LEFT  &kp SPACE  &kp RIGHT  &lt 1 ENTER  &lt 1 SPACE  &kp TAB
-            >;
-        };
-
-        SLOW {
-            display-name = "SLOW";
-            bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-                        &trans  &trans  &trans      &trans  &trans  &trans
+                            &kp LEFT  &kp SPACE  &kp RIGHT  &lt 3 ENTER  &lt 3 SPACE  &kp TAB
             >;
         };
     };
