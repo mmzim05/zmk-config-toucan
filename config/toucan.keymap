@@ -74,10 +74,10 @@
         SLOW {
             display-name = "SLOW";
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                        &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans    &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &mkp MB3  &mkp MB2  &mkp MB1  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans    &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                          &trans    &trans    &trans  &trans  &trans  &trans
             >;
         };
 
