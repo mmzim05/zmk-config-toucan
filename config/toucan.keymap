@@ -6,6 +6,7 @@
 #define NAV  1
 #define SYM  2
 #define ADJ  3
+#define PAD  4
 
 / {
     conditional_layers {
@@ -57,6 +58,16 @@
 &kp LCTRL  &trans  &kp F4  &kp F5    &kp F6  &kp F11    &trans        &trans      &trans        &trans  &trans  &trans
 &bt LSHFT  &trans  &kp F1  &kp F2    &kp F3  &kp F10    &trans        &trans      &trans        &trans  &trans  &trans
                            &kp LGUI  &mo 1   &kp SPACE  &kp RET       &mo 2       &kp RALT
+            >;
+        };
+
+        pad {
+            display-name = "PAD";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+                        &mkp LCLK  &mkp MCLK  &mkp RCLK    &trans  &trans  &trans
             >;
         };
     };

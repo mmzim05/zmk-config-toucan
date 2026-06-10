@@ -7,7 +7,6 @@
 #define NAV  1
 #define SYM  2
 #define ADJ  3
-#define PAD  4
 
 / {
     conditional_layers {
@@ -60,14 +59,8 @@
                                    &kp LGUI &mo NAV &kp SPACE   &kp RET &mo 2 &kp RALT
             >;
         };
-        pad {
-                display-name = "PAD";
-                bindings = <
-                    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                                   &mkp LCLK &mkp MCLK &mkp RCLK   &trans &trans &trans
-                >;
+        extra_1 {
+                status = "reserved";
         };
 
         extra_2 {
