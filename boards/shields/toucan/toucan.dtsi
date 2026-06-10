@@ -109,15 +109,19 @@
         device = <&glidepoint_split>;
         input-processors = <
             &zip_xy_scaler 150 100
-            &zip_temp_layer 2 300
+            &zip_temp_layer 3 300
         >;
         scroller {
-            layers = <1>;
+            layers = <2>;
             input-processors = <
                 &zip_xy_to_scroll_mapper
                 &zip_scroll_scaler 1 5
                 &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
             >;
+        };
+        slow_pointer {
+            layers = <5>;
+            input-processors = <&zip_xy_scaler 75 100>;
         };
     };
 };

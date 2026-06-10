@@ -16,7 +16,7 @@
         compatible = "zmk,combos";
 
         GAME {
-            bindings = <&to 3>;
+            bindings = <&to 4>;
             key-positions = <3 13 14 16>;
         };
 
@@ -81,6 +81,16 @@
             >;
         };
 
+        PAD {
+            display-name = "PAD";
+            bindings = <
+&trans  &trans  &trans    &trans    &trans    &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &mo 5   &mkp MB3  &mkp MB2  &mkp MB1  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans    &trans    &trans    &trans      &trans  &trans  &trans  &trans  &trans  &trans
+                          &trans    &trans    &trans      &trans  &trans  &trans
+            >;
+        };
+
         GAME {
             display-name = "GAME";
             bindings = <
@@ -88,6 +98,16 @@
 &kp LCTRL     &kp N  &kp R  &kp T     &kp S      &kp G      &kp P        &kp H        &kp A    &kp E     &kp I      &kp MINUS
 &kp LEFT_ALT  &kp X  &kp Q  &kp M     &kp W      &kp Z      &kp K        &kp F        &kp SQT  &kp SEMI  &kp DOT    &kp SLASH
                             &kp LEFT  &kp SPACE  &kp RIGHT  &lt 1 ENTER  &lt 1 SPACE  &kp TAB
+            >;
+        };
+
+        SLOW {
+            display-name = "SLOW";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+                        &trans  &trans  &trans      &trans  &trans  &trans
             >;
         };
     };
