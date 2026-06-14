@@ -1,4 +1,6 @@
 #include "../toucan/toucan_layout.dtsi"
+#include <input/processors.dtsi>
+#include <dt-bindings/zmk/input_transform.h>
 
 / {
     chosen {
@@ -11,5 +13,37 @@
         columns = <0>;
         rows = <0>;
         events = <0>;
+    };
+
+    split_inputs {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        glidepoint_split: glidepoint_split@0 {
+            compatible = "zmk,input-split";
+            reg = <0>;
+        };
+    };
+
+    glidepoint_listener: glidepoint_listener {
+        compatible = "zmk,input-listener";
+        status = "okay";
+        device = <&glidepoint_split>;
+        input-processors = <
+            &zip_xy_scaler 150 100
+            &zip_temp_layer 1 300
+        >;
+        scroller {
+            layers = <4>;
+            input-processors = <
+                &zip_xy_to_scroll_mapper
+                &zip_scroll_scaler 1 2
+                &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
+            >;
+        };
+        slow_pointer {
+            layers = <2>;
+            input-processors = <&zip_xy_scaler 75 100>;
+        };
     };
 };

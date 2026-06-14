@@ -42,7 +42,3 @@ nice_view_spi: &spi0 {
     , <&gpio1 12 GPIO_ACTIVE_HIGH>
     ;
 };
-
-&glidepoint_listener {
-    status = "okay";
-};
