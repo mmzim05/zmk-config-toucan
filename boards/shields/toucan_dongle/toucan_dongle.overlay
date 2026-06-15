@@ -1,6 +1,7 @@
 #include "../toucan/toucan_layout.dtsi"
 #include <input/processors.dtsi>
 #include <dt-bindings/zmk/input_transform.h>
+#include <behaviors/input_processor_gestures.dtsi>
 
 / {
     chosen {
@@ -30,6 +31,7 @@
         status = "okay";
         device = <&glidepoint_split>;
         input-processors = <
+            &zip_gestures
             &zip_xy_scaler 150 100
             &zip_temp_layer 1 300
         >;
@@ -46,4 +48,8 @@
             input-processors = <&zip_xy_scaler 75 100>;
         };
     };
+};
+
+&zip_gestures {
+    inertial-cursor;
 };

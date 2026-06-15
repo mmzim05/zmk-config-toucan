@@ -10,6 +10,8 @@ manifest:
       url-base: https://github.com/caksoylar
     - name: geeksville
       url-base: https://github.com/geeksville
+    - name: mmzim05
+      url-base: https://github.com/mmzim05
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -20,5 +22,8 @@ manifest:
     - name: zmk-rgbled-widget
       remote: caksoylar
       revision: v0.3
+    - name: zmk-input-gestures
+      remote: mmzim05
+      revision: main
   self:
     path: config
