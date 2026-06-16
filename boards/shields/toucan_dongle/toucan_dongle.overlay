@@ -53,5 +53,5 @@
 &zip_gestures {
     inertial-cursor;
     inertial-cursor-velocity-threshold = <1>;
-    inertial-cursor-decay-percent = <3>;
+    inertial-cursor-decay-percent = <5>;
 };
