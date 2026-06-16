@@ -1,6 +1,8 @@
 #include "../toucan/toucan_layout.dtsi"
 #include <input/processors.dtsi>
 #include <dt-bindings/zmk/input_transform.h>
+#include <behaviors/input_processor_gestures.dtsi>
+#include <behaviors/input_processor_abs_to_rel.dtsi>
 
 / {
     chosen {
@@ -30,20 +32,40 @@
         status = "okay";
         device = <&glidepoint_split>;
         input-processors = <
-            &zip_xy_scaler 150 100
-            &zip_temp_layer 1 300
+            &zip_gestures
+            &zip_abs_to_rel_cursor
+            &zip_xy_scaler 75 100
         >;
         scroller {
             layers = <4>;
             input-processors = <
+                &zip_abs_to_rel_scroll
                 &zip_xy_to_scroll_mapper
-                &zip_scroll_scaler 1 2
                 &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
+                &zip_scroll_gestures
             >;
         };
-        slow_pointer {
-            layers = <2>;
-            input-processors = <&zip_xy_scaler 75 100>;
-        };
+    };
+};
+
+&zip_gestures {
+    hold-layer = <1>;
+    inertial-cursor;
+    inertial-cursor-velocity-threshold = <1>;
+    inertial-cursor-decay-percent = <7>;
+};
+
+&zip_abs_to_rel_cursor {
+    max-delta = <60>;
+};
+
+/ {
+    zip_scroll_gestures: zip_scroll_gestures {
+        compatible = "zmk,input-processor-gestures";
+        #input-processor-cells = <0>;
+        status = "okay";
+        inertial-scroll;
+        inertial-scroll-velocity-threshold = <1>;
+        inertial-scroll-decay-percent = <7>;
     };
 };
