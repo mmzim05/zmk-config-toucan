@@ -33,7 +33,6 @@
         input-processors = <
             &zip_gestures
             &zip_xy_scaler 150 100
-            &zip_temp_layer 1 300
         >;
         scroller {
             layers = <4>;
@@ -52,6 +51,7 @@
 };
 
 &zip_gestures {
+    hold-layer = <1>;
     inertial-cursor;
     inertial-cursor-velocity-threshold = <1>;
     inertial-cursor-decay-percent = <5>;
