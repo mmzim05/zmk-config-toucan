@@ -52,4 +52,5 @@
 
 &zip_gestures {
     inertial-cursor;
+    inertial-cursor-velocity-threshold = <1>;
 };
