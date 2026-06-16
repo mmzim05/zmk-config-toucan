@@ -41,6 +41,7 @@
                 &zip_xy_to_scroll_mapper
                 &zip_scroll_scaler 1 2
                 &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
+                &zip_scroll_gestures
             >;
         };
         slow_pointer {
@@ -54,4 +55,15 @@
     inertial-cursor;
     inertial-cursor-velocity-threshold = <1>;
     inertial-cursor-decay-percent = <5>;
+};
+
+/ {
+    zip_scroll_gestures: zip_scroll_gestures {
+        compatible = "zmk,input-processor-gestures";
+        #input-processor-cells = <0>;
+        status = "okay";
+        inertial-scroll;
+        inertial-scroll-velocity-threshold = <1>;
+        inertial-scroll-decay-percent = <5>;
+    };
 };
