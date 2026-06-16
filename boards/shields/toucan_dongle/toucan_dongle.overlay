@@ -52,7 +52,7 @@
     hold-layer = <1>;
     inertial-cursor;
     inertial-cursor-velocity-threshold = <0>;
-    inertial-cursor-decay-percent = <15>;
+    inertial-cursor-decay-percent = <10>;
     inertial-cursor-speed-scale = <75>;
 };
 
