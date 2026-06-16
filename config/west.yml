@@ -24,6 +24,6 @@ manifest:
       revision: v0.3
     - name: zmk-input-gestures
       remote: mmzim05
-      revision: inertia
+      revision: main
   self:
     path: config

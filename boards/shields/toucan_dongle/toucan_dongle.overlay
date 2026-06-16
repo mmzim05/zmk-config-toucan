@@ -53,14 +53,10 @@
     inertial-cursor;
     inertial-cursor-velocity-threshold = <1>;
     inertial-cursor-decay-percent = <7>;
-    rotation-cos-fp = <1008>;
-    rotation-sin-fp = <178>;
 };
 
 &zip_abs_to_rel_cursor {
     max-delta = <60>;
-    rotation-cos-fp = <1008>;
-    rotation-sin-fp = <178>;
 };
 
 / {
