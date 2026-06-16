@@ -41,7 +41,6 @@
             input-processors = <
                 &zip_abs_to_rel_scroll
                 &zip_xy_to_scroll_mapper
-                &zip_scroll_scaler 1 2
                 &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
                 &zip_scroll_gestures
             >;
@@ -54,6 +53,10 @@
     inertial-cursor;
     inertial-cursor-velocity-threshold = <1>;
     inertial-cursor-decay-percent = <7>;
+};
+
+&zip_abs_to_rel_cursor {
+    max-delta = <60>;
 };
 
 / {
