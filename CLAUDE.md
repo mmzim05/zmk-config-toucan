@@ -9,6 +9,7 @@ ZMK firmware config for the Toucan — a wireless split keyboard with a Cirque P
 - Dongle overlay wires up the full input processor chain:
   `zip_gestures → zip_abs_to_rel_cursor → zip_xy_scaler 75 100`
 - Tuned inertial cursor: 5-event velocity window, speed-scale=75 to match scaler, threshold=3 (0.3 raw_px/ms), decay=9
+- Tuned inertial scroll: same 5-event velocity window, threshold=3 (0.3 raw_px/ms), decay=7
 
 ## Key files
 
@@ -16,13 +17,22 @@ ZMK firmware config for the Toucan — a wireless split keyboard with a Cirque P
 - `boards/shields/toucan/toucan_right.overlay` — Cirque hardware config (absolute mode, axis inversion)
 - `config/west.yml` — pulls in `zmk-input-gestures` from `mmzim05` remote
 
-## Current tuning (`&zip_gestures`)
+## Current tuning
+
+`&zip_gestures` (cursor):
 
 | Property | Value | Meaning |
 |---|---|---|
 | `inertial-cursor-velocity-threshold` | 3 | 0.3 raw_px/ms — filters stationary lifts only |
 | `inertial-cursor-decay-percent` | 9 | 9% speed lost per 16ms frame |
 | `inertial-cursor-speed-scale` | 75 | matches `zip_xy_scaler 75 100` |
+
+`zip_scroll_gestures` (scroll):
+
+| Property | Value | Meaning |
+|---|---|---|
+| `inertial-scroll-velocity-threshold` | 3 | 0.3 raw_px/ms — filters stationary lifts only |
+| `inertial-scroll-decay-percent` | 7 | 7% speed lost per 16ms frame |
 
 ## Picking up in a new session
 
