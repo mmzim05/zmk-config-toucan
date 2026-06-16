@@ -51,8 +51,9 @@
 &zip_gestures {
     hold-layer = <1>;
     inertial-cursor;
-    inertial-cursor-velocity-threshold = <1>;
+    inertial-cursor-velocity-threshold = <0>;
     inertial-cursor-decay-percent = <7>;
+    inertial-cursor-speed-scale = <75>;
 };
 
 &zip_abs_to_rel_cursor {
