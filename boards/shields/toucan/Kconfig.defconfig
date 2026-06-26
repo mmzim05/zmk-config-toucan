@@ -13,28 +13,3 @@ config RGBLED_WIDGET_BATTERY_LEVEL_HIGH
     default 40
 
 endif
-
-if SHIELD_TOUCAN_LEFT
-
-config ZMK_KEYBOARD_NAME
-    default "Toucan"
-
-config ZMK_SPLIT_ROLE_CENTRAL
-    default y
-
-config ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS
-    default 1
-
-config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
-    default y
-
-config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_PROXY
-    default y
-
-config BT_MAX_CONN
-    default 7
-
-config BT_MAX_PAIRED
-    default 7
-
-endif

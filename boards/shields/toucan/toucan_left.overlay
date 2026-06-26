@@ -1,8 +1,4 @@
 #include "toucan.dtsi"
-#include <input/processors.dtsi>
-#include <dt-bindings/zmk/input_transform.h>
-#include <behaviors/input_processor_gestures.dtsi>
-#include <behaviors/input_processor_abs_to_rel.dtsi>
 
 &pinctrl {
     spi0_default: spi0_default {
@@ -45,59 +41,4 @@ nice_view_spi: &spi0 {
     , <&gpio1 11 GPIO_ACTIVE_HIGH>
     , <&gpio1 12 GPIO_ACTIVE_HIGH>
     ;
-};
-
-/ {
-    split_inputs {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        glidepoint_split: glidepoint_split@0 {
-            compatible = "zmk,input-split";
-            reg = <0>;
-        };
-    };
-
-    glidepoint_listener: glidepoint_listener {
-        compatible = "zmk,input-listener";
-        status = "okay";
-        device = <&glidepoint_split>;
-        input-processors = <
-            &zip_gestures
-            &zip_abs_to_rel_cursor
-            &zip_xy_scaler 75 100
-        >;
-        scroller {
-            layers = <4>;
-            input-processors = <
-                &zip_abs_to_rel_scroll
-                &zip_xy_to_scroll_mapper
-                &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
-                &zip_scroll_gestures
-            >;
-        };
-    };
-};
-
-&zip_gestures {
-    hold-layer = <1>;
-    inertial-cursor;
-    inertial-cursor-velocity-threshold = <3>;
-    inertial-cursor-decay-percent = <9>;
-    inertial-cursor-speed-scale = <75>;
-};
-
-&zip_abs_to_rel_cursor {
-    max-delta = <60>;
-};
-
-/ {
-    zip_scroll_gestures: zip_scroll_gestures {
-        compatible = "zmk,input-processor-gestures";
-        #input-processor-cells = <0>;
-        status = "okay";
-        inertial-scroll;
-        inertial-scroll-velocity-threshold = <3>;
-        inertial-scroll-decay-percent = <7>;
-    };
 };
