@@ -36,8 +36,10 @@ include:
     shield: toucan_right rgbled_adapter
     artifact-name: toucan_right
   - board: seeeduino_xiao_ble
-    shield: toucan_right rgbled_adapter zmk-usb-logging
+    shield: toucan_right rgbled_adapter
+    snippet: studio-rpc-usb-uart
     cmake-args: >-
+      -DCONFIG_ZMK_USB_LOGGING=y
       -DCONFIG_HW_STACK_PROTECTION=y
       -DCONFIG_FAULT_DUMP=2
       -DCONFIG_LOG=y
