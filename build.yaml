@@ -34,17 +34,5 @@ include:
     artifact-name: toucan_left_peripheral
   - board: seeeduino_xiao_ble
     shield: toucan_right rgbled_adapter
-    artifact-name: toucan_right
-  - board: seeeduino_xiao_ble
-    shield: toucan_right rgbled_adapter
-    snippet: studio-rpc-usb-uart
-    cmake-args: >-
-      -DCONFIG_ZMK_USB_LOGGING=y
-      -DCONFIG_HW_STACK_PROTECTION=y
-      -DCONFIG_FAULT_DUMP=2
-      -DCONFIG_LOG=y
-      -DCONFIG_LOG_DEFAULT_LEVEL=4
-      -DCONFIG_THREAD_NAME=y
-    artifact-name: toucan_right_debug
   - board: seeeduino_xiao_ble
     shield: settings_reset
