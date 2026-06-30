@@ -91,7 +91,7 @@
         device = <&glidepoint>;
         touch-key = <&touch_kscan>;
         max-delta = <60>;
-        touch-timeout-ms = <10>;
+        touch-timeout-ms = <20>;
         velocity-threshold = <3>;
         decay-percent = <9>;
         speed-scale = <100>;
