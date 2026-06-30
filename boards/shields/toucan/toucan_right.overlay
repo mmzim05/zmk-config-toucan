@@ -75,6 +75,44 @@
 };
 
 / {
+    chosen {
+        zmk,kscan = &kscan_composite;
+    };
+
+    touch_kscan: touch_kscan {
+        compatible = "zmk,kscan-touch-detect";
+        status = "okay";
+    };
+
+    periph_gesture: periph_gesture {
+        compatible = "zmk,input-peripheral-gesture";
+        #input-processor-cells = <0>;
+        status = "okay";
+        device = <&glidepoint>;
+        touch-key = <&touch_kscan>;
+        max-delta = <60>;
+        touch-timeout-ms = <30>;
+        velocity-threshold = <3>;
+        decay-percent = <9>;
+        speed-scale = <100>;
+    };
+
+    kscan_composite: kscan_composite {
+        compatible = "zmk,kscan-composite";
+        rows = <4>;
+        columns = <6>;
+
+        kscan0_dev {
+            kscan = <&kscan0>;
+        };
+
+        touch_kscan_dev {
+            kscan = <&touch_kscan>;
+            row-offset = <3>;
+            col-offset = <3>;
+        };
+    };
+
     split_inputs {
         #address-cells = <1>;
         #size-cells = <0>;
@@ -83,9 +121,7 @@
             compatible = "zmk,input-split";
             reg = <0>;
             device = <&glidepoint>;
-
-            // Optional
-            // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+            input-processors = <&periph_gesture>;
         };
     };
 };

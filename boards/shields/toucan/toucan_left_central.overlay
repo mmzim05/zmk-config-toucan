@@ -1,7 +1,5 @@
 #include <input/processors.dtsi>
 #include <dt-bindings/zmk/input_transform.h>
-#include <behaviors/input_processor_gestures.dtsi>
-#include <behaviors/input_processor_abs_to_rel.dtsi>
 
 / {
     split_inputs {
@@ -18,42 +16,13 @@
         compatible = "zmk,input-listener";
         status = "okay";
         device = <&glidepoint_split>;
-        input-processors = <
-            &zip_gestures
-            &zip_abs_to_rel_cursor
-            &zip_xy_scaler 75 100
-        >;
+        input-processors = <&zip_xy_scaler 75 100>;
         scroller {
             layers = <4>;
             input-processors = <
-                &zip_abs_to_rel_scroll
                 &zip_xy_to_scroll_mapper
                 &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
-                &zip_scroll_gestures
             >;
         };
-    };
-};
-
-&zip_gestures {
-    hold-layer = <1>;
-    inertial-cursor;
-    inertial-cursor-velocity-threshold = <3>;
-    inertial-cursor-decay-percent = <9>;
-    inertial-cursor-speed-scale = <75>;
-};
-
-&zip_abs_to_rel_cursor {
-    max-delta = <60>;
-};
-
-/ {
-    zip_scroll_gestures: zip_scroll_gestures {
-        compatible = "zmk,input-processor-gestures";
-        #input-processor-cells = <0>;
-        status = "okay";
-        inertial-scroll;
-        inertial-scroll-velocity-threshold = <3>;
-        inertial-scroll-decay-percent = <7>;
     };
 };
