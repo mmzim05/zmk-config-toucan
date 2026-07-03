@@ -25,11 +25,6 @@ include:
     cmake-args: -DCONFIG_ZMK_STUDIO=y
     artifact-name: toucan_dongle
   - board: seeeduino_xiao_ble
-    shield: toucan_left toucan_left_central rgbled_adapter nice_view_gem
-    snippet: studio-rpc-usb-uart
-    cmake-args: -DCONFIG_ZMK_STUDIO=y
-    artifact-name: toucan_left_central
-  - board: seeeduino_xiao_ble
     shield: toucan_left rgbled_adapter nice_view_gem
     artifact-name: toucan_left_peripheral
   - board: seeeduino_xiao_ble
