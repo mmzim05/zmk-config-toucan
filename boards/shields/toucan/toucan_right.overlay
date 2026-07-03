@@ -95,7 +95,7 @@
         velocity-threshold = <3>;
         decay-percent = <9>;
         speed-scale = <100>;
-        rotate-cdeg = <(-1500)>;
+        rotate-cdeg = <3000>;
     };
 
     kscan_composite: kscan_composite {
