@@ -29,5 +29,6 @@ include:
     artifact-name: toucan_left_peripheral
   - board: seeeduino_xiao_ble
     shield: toucan_right rgbled_adapter
+    artifact-name: toucan_right
   - board: seeeduino_xiao_ble
     shield: settings_reset
