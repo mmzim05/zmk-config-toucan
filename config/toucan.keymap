@@ -4,11 +4,6 @@
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
 
-#define BASE 0
-#define NAV  1
-#define SYM  2
-#define ADJ  3
-
 / {
     conditional_layers { compatible = "zmk,conditional-layers"; };
 
@@ -16,7 +11,7 @@
         compatible = "zmk,combos";
 
         GAME {
-            bindings = <&to 5>;
+            bindings = <&to 4>;
             key-positions = <3 13 14 16>;
         };
 
@@ -57,7 +52,7 @@
 &kp GRAVE     &kp B  &kp L  &kp D       &kp C                                 &kp V                        &kp J        &kp Y        &kp O    &kp U     &kp COMMA  &kp BACKSLASH
 &kp LCTRL     &kp N  &kp R  &kp T       &kp S                                 &kp G                        &kp P        &kp H        &kp A    &kp E     &kp I      &kp MINUS
 &kp LEFT_ALT  &kp X  &kp Q  &kp M       &kp W                                 &kp Z                        &kp K        &kp F        &kp SQT  &kp SEMI  &kp DOT    &kp SLASH
-                            &kp ESCAPE  &hold_preferred LEFT_SHIFT BACKSPACE  &hold_preferred LWIN DELETE  &lt 4 ENTER  &lt 3 SPACE  &kp TAB  &mo 1
+                            &kp ESCAPE  &hold_preferred LEFT_SHIFT BACKSPACE  &hold_preferred LWIN DELETE  &lt 3 ENTER  &lt 2 SPACE  &kp TAB  &mo 1
             >;
         };
 
@@ -65,19 +60,9 @@
             display-name = "PAD";
             bindings = <
 &trans  &trans  &trans    &trans    &trans    &trans  &trans    &trans    &trans    &trans  &trans  &trans
-&trans  &mo 2   &mkp MB3  &mkp MB2  &mkp MB1  &trans  &mkp MB1  &mkp MB2  &mkp MB3  &trans  &trans  &trans
+&trans  &trans  &mkp MB3  &mkp MB2  &mkp MB1  &trans  &mkp MB1  &mkp MB2  &mkp MB3  &trans  &trans  &trans
 &trans  &trans  &trans    &trans    &trans    &trans  &mkp MB1  &mkp MB2  &mkp MB3  &trans  &trans  &trans
                           &trans    &trans    &trans  &trans    &trans    &trans    &trans
-            >;
-        };
-
-        SLOW {
-            display-name = "SLOW";
-            bindings = <
-&trans  &trans  &trans    &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &mkp MB3  &mkp MB2  &mkp MB1  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans    &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                          &trans    &trans    &trans  &trans  &trans  &trans  &trans
             >;
         };
 
@@ -107,7 +92,7 @@
 &kp ESCAPE    &kp B  &kp L  &kp D     &kp C      &kp V      &kp J        &kp Y        &kp O    &kp U     &kp COMMA  &kp BACKSLASH
 &kp LCTRL     &kp N  &kp R  &kp T     &kp S      &kp G      &kp P        &kp H        &kp A    &kp E     &kp I      &kp MINUS
 &kp LEFT_ALT  &kp X  &kp Q  &kp M     &kp W      &kp Z      &kp K        &kp F        &kp SQT  &kp SEMI  &kp DOT    &kp SLASH
-                            &kp LEFT  &kp SPACE  &kp RIGHT  &lt 3 ENTER  &lt 3 SPACE  &kp TAB  &trans
+                            &kp LEFT  &kp SPACE  &kp RIGHT  &lt 2 ENTER  &lt 2 SPACE  &kp TAB  &trans
             >;
         };
     };
