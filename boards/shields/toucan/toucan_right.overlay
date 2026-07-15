@@ -93,7 +93,7 @@
         max-delta = <60>;
         touch-timeout-ms = <20>;
         velocity-threshold = <3>;
-        decay-percent = <9>;
+        decay-percent = <17>;
         speed-scale = <100>;
         rotate-cdeg = <3000>;
     };
