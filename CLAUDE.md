@@ -13,7 +13,7 @@ All trackpad intelligence runs on the **right half (peripheral)**:
    - Tracks a 5-event velocity window
    - On touch start: cancels inertial animation, presses virtual touch key
    - On touch end: starts inertial animation if velocity above threshold, releases touch key
-   - Inertial animation: 16ms timer, decays velocity, injects REL events via `input_report_rel()`
+   - Inertial animation: 32ms timer, decays velocity, injects REL events via `input_report_rel()`
    - Only non-zero REL pairs cross BLE — zero-delta frames are dropped entirely
 
 2. `touch_kscan` (`zmk,kscan-touch-detect`) is a virtual kscan key at RC(3,9) wired into `kscan_composite`. Touch start/end from `periph_gesture` drives it. The key carries any ZMK behavior in the keymap.
@@ -37,10 +37,13 @@ The **central (left half or dongle)** receives only REL events and virtual key e
 | Property | Value | Meaning |
 |---|---|---|
 | `max-delta` | 60 | Clamps per-poll jump glitches |
-| `touch-timeout-ms` | 30 | Ms silence → touch end |
+| `touch-timeout-ms` | 20 | Ms silence → touch end (≥ 2× Cirque poll interval) |
 | `velocity-threshold` | 3 | 0.3 raw_px/ms — filters stationary lifts |
-| `decay-percent` | 9 | 9% speed lost per 16ms inertial frame |
+| `decay-percent` | 17 | 17% speed lost per 32ms inertial frame (≈ 9% per 16ms) |
 | `speed-scale` | 100 | Matches `zip_xy_scaler 75 100` numerator on central |
+| `rotate-cdeg` | 3000 | 30° CCW rotation to compensate physical trackpad tilt |
+
+Inertial tick: 32ms (31 Hz). Halved from 16ms to reduce BLE notification rate at long range.
 
 Scaler on central: `zip_xy_scaler 75 100` (applied to both cursor and inertial REL events).
 
