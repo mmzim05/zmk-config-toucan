@@ -79,10 +79,10 @@
         NAV {
             display-name = "NAV";
             bindings = <
-&bt BT_CLR    &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &trans  &kp C_PREV        &kp C_VOLUME_UP  &kp C_VOLUME_DOWN  &kp C_NEXT  &trans
-&out OUT_TOG  &trans        &mkp MB3      &mkp MB2      &mkp MB1      &trans        &trans  &kp LEFT          &kp UP           &kp DOWN           &kp RIGHT   &trans
-&trans        &trans        &trans        &trans        &trans        &trans        &trans  &kp C_PLAY_PAUSE  &kp C_MUTE       &trans             &trans      &trans
-                                          &trans        &trans        &kp LGUI      &trans  &trans            &trans
+&bt BT_CLR    &bt BT_SEL 0      &bt BT_SEL 1      &bt BT_SEL 2      &bt BT_SEL 3      &bt BT_SEL 4  &trans    &kp C_PREV  &kp C_VOLUME_UP  &kp C_VOLUME_DOWN  &kp C_NEXT  &trans
+&out OUT_TOG  &kp LG(NUMBER_1)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)  &kp LG(NUMBER_4)  &kp LG(N5)    &kp HOME  &kp LEFT    &kp UP           &kp DOWN           &kp RIGHT   &kp END
+&trans        &trans            &trans            &trans            &trans            &trans        &trans    &kp INSERT  &kp PAGE_UP      &kp PAGE_DOWN      &trans      &trans
+                                                  &trans            &kp C_PLAY_PAUSE  &kp LGUI      &trans    &trans      &trans
             >;
         };
 
