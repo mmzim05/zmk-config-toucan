@@ -25,6 +25,11 @@ include:
     cmake-args: -DCONFIG_ZMK_STUDIO=y
     artifact-name: toucan_dongle
   - board: seeeduino_xiao_ble
+    shield: toucan_dongle
+    snippet: zmk-usb-logging
+    cmake-args: -DCONFIG_BT_CTLR_CONN_RSSI=y -DCONFIG_ZMK_RSSI_LOGGER=y
+    artifact-name: toucan_dongle_rssi_debug
+  - board: seeeduino_xiao_ble
     shield: toucan_left rgbled_adapter nice_view_gem
     artifact-name: toucan_left_peripheral
   - board: seeeduino_xiao_ble
