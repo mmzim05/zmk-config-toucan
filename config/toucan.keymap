@@ -80,20 +80,20 @@
         NUM {
             display-name = "NUM";
             bindings = <
-&kp F1            &kp F2        &kp F3      &kp F4         &kp F5        &kp F6         &kp F7         &kp F8        &kp F9        &kp F10       &kp F11       &kp F12
-&kp EQUAL         &kp N1        &kp N2      &kp N3         &kp N4        &kp N5         &kp N6         &kp N7        &kp N8        &kp N9        &kp N0        &trans
-&kp LEFT_BRACKET  &kp LS(EXCL)  &kp LS(AT)  &kp LS(POUND)  &kp LS(DLLR)  &kp LS(PRCNT)  &kp LS(CARET)  &kp LS(AMPS)  &kp LS(STAR)  &kp LS(LPAR)  &kp LS(RPAR)  &kp RIGHT_BRACKET
-                                            &kp COMMA      &trans        &kp PERIOD     &trans         &trans        &trans        &trans
+&trans  &trans        &trans      &trans         &trans        &trans         &trans         &trans        &kp EQUAL     &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans
+&trans  &kp N1        &kp N2      &kp N3         &kp N4        &kp N5         &kp N6         &kp N7        &kp N8        &kp N9            &kp N0             &trans
+&trans  &kp LS(EXCL)  &kp LS(AT)  &kp LS(POUND)  &kp LS(DLLR)  &kp LS(PRCNT)  &kp LS(CARET)  &kp LS(AMPS)  &kp LS(STAR)  &kp LS(LPAR)      &kp LS(RPAR)       &trans
+                                  &kp COMMA      &trans        &kp PERIOD     &trans         &trans        &trans        &trans
             >;
         };
 
         NAV {
             display-name = "NAV";
             bindings = <
-&bt BT_CLR    &bt BT_SEL 0      &bt BT_SEL 1      &bt BT_SEL 2      &bt BT_SEL 3      &bt BT_SEL 4  &trans    &kp C_PREV  &kp C_VOLUME_UP  &kp C_VOLUME_DOWN  &kp C_NEXT  &trans
-&out OUT_TOG  &kp LG(NUMBER_1)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)  &kp LG(NUMBER_4)  &kp LG(N5)    &kp HOME  &kp LEFT    &kp UP           &kp DOWN           &kp RIGHT   &kp END
-&trans        &trans            &trans            &trans            &trans            &trans        &trans    &kp INSERT  &kp PAGE_UP      &kp PAGE_DOWN      &trans      &trans
-                                                  &trans            &kp C_PLAY_PAUSE  &kp LGUI      &trans    &trans      &trans           &trans
+&bt BT_CLR    &bt BT_SEL 0      &bt BT_SEL 1      &bt BT_SEL 2      &bt BT_SEL 3      &bt BT_SEL 4  &trans    &kp INS   &kp PAGE_UP  &kp PAGE_DOWN  &kp C_NEXT  &trans
+&out OUT_TOG  &kp LG(NUMBER_1)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)  &kp LG(NUMBER_4)  &kp LG(N5)    &kp HOME  &kp LEFT  &kp UP       &kp DOWN       &kp RIGHT   &kp END
+&kp F1        &kp F2            &kp F3            &kp F4            &kp F5            &kp F6        &kp F7    &kp F8    &kp F9       &kp F10        &kp F11     &kp F12
+                                                  &trans            &kp C_PLAY_PAUSE  &kp LGUI      &trans    &trans    &trans       &trans
             >;
         };
 
