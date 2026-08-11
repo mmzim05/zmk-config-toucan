@@ -80,10 +80,10 @@
         NUM {
             display-name = "NUM";
             bindings = <
-&trans  &trans        &trans      &trans         &trans        &trans         &trans         &trans        &kp EQUAL     &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans
-&trans  &kp N1        &kp N2      &kp N3         &kp N4        &kp N5         &kp N6         &kp N7        &kp N8        &kp N9            &kp N0             &trans
-&trans  &kp LS(EXCL)  &kp LS(AT)  &kp LS(POUND)  &kp LS(DLLR)  &kp LS(PRCNT)  &kp LS(CARET)  &kp LS(AMPS)  &kp LS(STAR)  &kp LS(LPAR)      &kp LS(RPAR)       &trans
-                                  &kp COMMA      &trans        &kp PERIOD     &trans         &trans        &trans        &trans
+&trans  &trans        &trans      &kp PLUS       &kp EQUAL     &trans         &trans         &kp LEFT_BRACE  &kp RIGHT_BRACE  &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans
+&trans  &kp N1        &kp N2      &kp N3         &kp N4        &kp N5         &kp N6         &kp N7          &kp N8           &kp N9            &kp N0             &trans
+&trans  &kp LS(EXCL)  &kp LS(AT)  &kp LS(POUND)  &kp LS(DLLR)  &kp LS(PRCNT)  &kp LS(CARET)  &kp LS(AMPS)    &kp LS(STAR)     &kp LS(LPAR)      &kp LS(RPAR)       &trans
+                                  &kp COMMA      &trans        &kp PERIOD     &trans         &trans          &trans           &trans
             >;
         };
 
