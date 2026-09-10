@@ -46,11 +46,12 @@ The **central (left half or dongle)** receives only REL events and virtual key e
 | `max-delta` | 60 | Clamps per-poll jump glitches |
 | `touch-timeout-ms` | 20 | Ms silence → touch end (≥ 2× Cirque 10ms poll interval) |
 | `velocity-threshold` | 3 | 0.3 raw_px/ms — filters stationary lifts |
-| `decay-percent` | 17 | 17% speed lost per 32ms inertial frame (≈ 9% per 16ms) |
+| `decay-percent` | 6 | 6% speed lost per 10ms inertial frame — retuned for the 10ms tick (was 17%@32ms) to keep the same real-time glide feel |
 | `speed-scale` | 100 | Matches `zip_xy_scaler 75 100` numerator on central |
 | `rotate-cdeg` | 3000 | 30° CCW rotation to compensate physical trackpad tilt |
+| `touch-confirm-samples` | 2 | Consecutive ABS samples required before a touch is confirmed (kscan press, idle-timer reset). Filters single-sample phantom touches from electrical noise so they can't keep the right half awake |
 
-Inertial tick: 32ms (31 Hz). Halved from 16ms to reduce BLE notification rate at long range.
+Inertial tick: always 10ms (100 Hz), matching the live Cirque poll rate — no slower post-lift rate. A prior tuning (`decay-percent`@17, tick halved to 32ms) traded cursor smoothness after lift for lower BLE notification rate, as a workaround for right-half crashes at range. That workaround is reverted: the crashes are the XIAO's weak stock antenna (see `docs/antenna-mod.md`), not something to fix by slowing the cursor. If range instability recurs, look at the antenna mod / RSSI logging, not the inertial tick.
 
 Scaler on central: `zip_xy_scaler 75 100` (applied to both cursor and inertial REL events).
 
@@ -64,6 +65,12 @@ Scaler on central: `zip_xy_scaler 75 100` (applied to both cursor and inertial R
 
 - gesture_work_q runs all three work handlers to keep the `kscan→split→BLE` chain off the system workqueue
 - `CONFIG_BT_BUF_ACL_TX_COUNT=10` (default 3) — extra ACL TX buffers absorb retransmission backpressure at long range
+
+## Sleep / battery (right half)
+
+- `CONFIG_ZMK_IDLE_TIMEOUT=30000` — 30s of no activity → idle state
+- `CONFIG_ZMK_IDLE_SLEEP_TIMEOUT=300000` — additional 5 min of no activity → deep sleep. Kept short (unlike the left central's long timeout) because the right half is a peripheral: waking it re-pairs to the central automatically in the background, there's no user-facing host re-bond to avoid.
+- ZMK only resets the idle timer on `zmk_position_state_changed` (real or virtual key press) and `zmk_sensor_event` — trackpad REL motion itself does not reset it. The virtual touch key (`touch_kscan`) does fire `zmk_position_state_changed`, gated by `touch-confirm-samples` in `periph_gesture` (see `CLAUDE.md` in `zmk-input-gestures`) specifically so electrical-noise phantom touches can't hold the idle timer open and drain the battery.
 
 ## Workflow
 

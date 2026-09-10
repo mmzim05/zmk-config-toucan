@@ -93,9 +93,10 @@
         max-delta = <60>;
         touch-timeout-ms = <20>;
         velocity-threshold = <3>;
-        decay-percent = <17>;
+        decay-percent = <6>;
         speed-scale = <100>;
         rotate-cdeg = <3000>;
+        touch-confirm-samples = <2>;
     };
 
     kscan_composite: kscan_composite {
