@@ -67,8 +67,9 @@
         y-invert;
         absolute-mode;
 
-        // Aggressive power saving: after 5 seconds with no touches the trackpad goes to
-        // sleep instead of scanning at 100Hz continuously. ~300ms wake delay on next touch.
+        // Aggressive power saving: chip sleeps instead of scanning at 100Hz continuously.
+        // Tied to ZMK's own idle state (CONFIG_ZMK_IDLE_TIMEOUT, currently 30s in
+        // toucan_right.conf), not a separate timer. ~300ms wake delay on next touch.
         // Requires CONFIG_ZMK_INPUT_PINNACLE_IDLE_SLEEPER=y in toucan_right.conf.
 	    sleep;
     };
