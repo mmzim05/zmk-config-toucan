@@ -67,11 +67,12 @@
         y-invert;
         absolute-mode;
 
-        // Aggressive power saving: chip sleeps instead of scanning at 100Hz continuously.
-        // Tied to ZMK's own idle state (CONFIG_ZMK_IDLE_TIMEOUT, currently 30s in
-        // toucan_right.conf), not a separate timer. ~300ms wake delay on next touch.
-        // Requires CONFIG_ZMK_INPUT_PINNACLE_IDLE_SLEEPER=y in toucan_right.conf.
-	    sleep;
+        // Tried the chip-level autosleep here (CONFIG_ZMK_INPUT_PINNACLE_IDLE_SLEEPER),
+        // reverted: wake latency was several seconds of finger movement, not the ~300ms
+        // expected, because the chip's own Sleep Interval (hardcoded 255 in
+        // input_pinnacle.c, not exposed via Kconfig/DT) governs how often it checks for
+        // a touch while asleep — a touch between checks gets missed. See toucan_right.conf.
+	    //sleep;
     };
 };
 
