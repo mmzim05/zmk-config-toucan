@@ -69,10 +69,10 @@
         PAD {
             display-name = "PAD";
             bindings = <
-&trans  &trans  &trans    &trans    &trans    &trans  &trans    &trans    &trans    &trans  &trans  &trans
-&trans  &mo 3   &mkp MB3  &mkp MB2  &mkp MB1  &trans  &mkp MB1  &mkp MB2  &mkp MB3  &trans  &trans  &trans
-&trans  &trans  &trans    &trans    &trans    &trans  &mkp MB1  &mkp MB2  &mkp MB3  &trans  &trans  &trans
-                          &trans    &trans    &trans  &trans    &trans    &trans    &trans
+&trans  &kp LG(NUMBER_1)  &kp LG(N2)  &kp LG(N3)  &kp LG(N4)  &kp LG(N5)  &kp LG(N6)  &kp LG(N7)  &kp LG(N8)  &kp LG(N9)  &kp LG(N0)  &trans
+&trans  &mo 3             &mkp MB3    &mkp MB2    &mkp MB1    &trans      &mkp MB1    &mkp MB2    &mkp MB3    &trans      &trans      &trans
+&trans  &trans            &trans      &trans      &trans      &trans      &mkp MB1    &mkp MB2    &mkp MB3    &trans      &trans      &trans
+                                      &trans      &trans      &trans      &trans      &trans      &trans      &trans
             >;
         };
 
@@ -82,17 +82,17 @@
 &trans  &kp GRAVE     &kp TILDE   &kp PLUS       &kp EQUAL     &trans         &trans         &kp LEFT_BRACE  &kp RIGHT_BRACE  &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans
 &trans  &kp N1        &kp N2      &kp N3         &kp N4        &kp N5         &kp N6         &kp N7          &kp N8           &kp N9            &kp N0             &trans
 &trans  &kp LS(EXCL)  &kp LS(AT)  &kp LS(POUND)  &kp LS(DLLR)  &kp LS(PRCNT)  &kp LS(CARET)  &kp LS(AMPS)    &kp LS(STAR)     &kp LS(LPAR)      &kp LS(RPAR)       &trans
-                                  &kp COMMA      &trans        &kp PERIOD     &trans         &trans          &trans           &trans
+                                  &trans         &kp COMMA     &kp PERIOD     &trans         &trans          &trans           &trans
             >;
         };
 
         NAV {
             display-name = "NAV";
             bindings = <
-&bt BT_CLR  &bt BT_SEL 0      &bt BT_SEL 1      &bt BT_SEL 2      &bt BT_SEL 3      &bt BT_SEL 4  &trans    &kp INS   &kp PAGE_UP  &kp PAGE_DOWN  &kp C_NEXT  &trans
-&kp LCTRL   &kp LG(NUMBER_1)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)  &kp LG(NUMBER_4)  &kp LG(N5)    &kp HOME  &kp LEFT  &kp UP       &kp DOWN       &kp RIGHT   &kp END
-&kp F1      &kp F2            &kp F3            &kp F4            &kp F5            &kp F6        &kp F7    &kp F8    &kp F9       &kp F10        &kp F11     &kp F12
-                                                &kp LEFT_ALT      &kp LEFT_SHIFT    &kp LGUI      &trans    &trans    &trans       &trans
+&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1    &bt BT_SEL 2  &bt BT_SEL 3    &bt BT_SEL 4  &kp INS   &kp PAGE_DOWN   &kp PG_UP     &kp C_MUTE  &kp C_VOLUME_UP  &kp C_VOLUME_DOWN
+&kp LCTRL   &trans        &kp C_PREVIOUS  &kp C_PLAY    &kp C_NEXT      &trans        &kp LEFT  &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT   &kp HOME         &kp END
+&kp F1      &kp F2        &kp F3          &kp F4        &kp F5          &kp F6        &kp F7    &kp F8          &kp F9        &kp F10     &kp F11          &kp F12
+                                          &kp LEFT_ALT  &kp LEFT_SHIFT  &kp LGUI      &trans    &trans          &trans        &trans
             >;
         };
 
