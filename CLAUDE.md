@@ -23,20 +23,22 @@ All trackpad intelligence runs on the **right half (peripheral)**:
 
 The **central (left half or dongle)** receives only REL events and virtual key events. It:
 - Routes REL through `zip_xy_scaler 75 100` → cursor
-- On scroll layer: routes REL through `zip_xy_to_scroll_mapper` + `zip_scroll_transform X_INVERT` → scroll
-  - Left central: scroll on layer 4, no speed scaler
-  - Dongle: scroll on layer 3, `zip_scroll_scaler 1 2` (half speed)
+- On NAV layer (3): routes REL through `zip_xy_to_scroll_mapper` + `zip_scroll_transform X_INVERT` → scroll
+  - Left central: no speed scaler
+  - Dongle: `zip_scroll_scaler 1 2` (half speed)
+  - (Left central's scroller was mistakenly on layer 4 — GAME — until it was fixed to match the dongle's layer 3; likely drifted when GAME was added/layers were reordered.)
+- On GAME layer (4): trackpad fully disabled via `zmk,input-processor-drop` (`input_drop` node, `zmk-input-gestures`) — zeroes movement/scroll/click events so nothing reaches HID. Touch key is bound to `&none` on this layer (was `&trans`, which fell through to BASE's `&touchpad 1 LCLK`).
 - Touch key in BASE layer = `&mo 1` (activates PAD layer for mouse buttons while touching)
 
 ## Key files
 
 - `boards/shields/toucan/toucan_right.overlay` — Cirque hardware, `periph_gesture`, `touch_kscan`, `kscan_composite`
 - `boards/shields/toucan/toucan_right.conf` — right half Kconfig (gesture workq stack, INPUT_THREAD stack, BLE buffers)
-- `boards/shields/toucan/toucan_left_central.overlay` — central input chain (scaler + scroller, layer 4)
+- `boards/shields/toucan/toucan_left_central.overlay` — central input chain (scaler + scroller on layer 3, drop on layer 4/GAME)
 - `boards/shields/toucan/toucan_left_central.conf` — left central Kconfig (stack sizes, smooth scrolling, BLE CI)
-- `boards/shields/toucan_dongle/toucan_dongle.overlay` — dongle input chain (scaler + scroller, layer 3, half scroll speed)
+- `boards/shields/toucan_dongle/toucan_dongle.overlay` — dongle input chain (scaler + scroller on layer 3 half-speed, drop on layer 4/GAME)
 - `boards/shields/toucan/toucan_layout.dtsi` — 43-key layout including virtual touch key at RC(3,9)
-- `config/toucan.keymap` — 43 bindings per layer; touch key = `&mo 1` in BASE, `&trans` elsewhere
+- `config/toucan.keymap` — 43 bindings per layer; touch key = `&mo 1` in BASE, `&none` in GAME, `&trans` elsewhere
 - `config/west.yml` — pulls in `zmk-input-gestures` from `mmzim05` remote
 
 ## Current tuning (`periph_gesture` on right half)
@@ -74,6 +76,7 @@ Two independent power domains, both matter:
 - **Waking from deep sleep — do not enable `CONFIG_ZMK_PM_SOFT_OFF` here.** Tried it once (the old comment thought it was required for the Cirque suspend/resume notifications); it made waking the right half strictly more restrictive on top of the bug below. Root cause: `CONFIG_ZMK_SLEEP=y` alone already `select`s `ZMK_PM_DEVICE_SUSPEND_RESUME` in ZMK's own Kconfig, so Soft Off was never needed for that. It's also unreachable in this config (no `&soft_off` keymap binding).
 - **`kscan_composite` needs its own `wakeup-source;`, separate from the child kscan's.** `kscan0` (`toucan.dtsi`) has `wakeup-source;`, but the right half's chosen `zmk,kscan` is `kscan_composite` (`toucan_right.overlay`), which wraps `kscan0` + the virtual `touch_kscan`. Per ZMK's kscan-composite docs, the composite node needs `wakeup-source;` set **on itself**, in addition to any child kscan that should wake it — a child's property alone does not propagate up. Without it, a real key press did nothing after deep sleep; only the physical reset button worked. Fixed by adding `wakeup-source;` directly to the `kscan_composite` node.
 - **Cirque chip scan**: without chip-level power management the Pinnacle scans at its native ~100Hz continuously any time the MCU is awake, whether or not you're touching it — datasheet-rated ~2.9mA active vs ~40µA asleep, so this can dominate battery life on its own. `CONFIG_ZMK_INPUT_PINNACLE_IDLE_SLEEPER` + `sleep;` on the `glidepoint` node (`toucan_right.overlay`) would put the chip itself to sleep (`zmk_pinnacle_idle_sleeper.c` in `cirque-input-module` flips it on after `CONFIG_ZMK_IDLE_TIMEOUT`, 30s). **Tried and reverted**: once asleep, the chip's own Sleep Interval register (hardcoded to 255 in `input_pinnacle.c`'s init, not exposed via Kconfig/DT) governs how often it wakes to check for a touch, not a flat ~300ms — a touch landing between checks is missed, so in practice it took several seconds of moving a finger around before the cursor responded. Left disabled (commented out in both files) in favor of just the MCU-level deep sleep below, which has no responsiveness cost. Revisiting this would mean forking `cirque-input-module` to make the Sleep Interval short/configurable.
+- **`CONFIG_ZMK_HEARTBEAT_LED=y`** (`toucan_right.conf`) — standing diagnostic, zero cost. 1Hz blink on `led0`; if the right half ever goes unresponsive again, whether the LED is still blinking tells you if it's a hang past init vs. the MCU not coming back up at all.
 
 ## Workflow
 

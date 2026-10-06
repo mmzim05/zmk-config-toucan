@@ -12,17 +12,30 @@
         };
     };
 
+    input_drop: input_drop {
+        compatible = "zmk,input-processor-drop";
+        #input-processor-cells = <0>;
+        status = "okay";
+    };
+
     glidepoint_listener: glidepoint_listener {
         compatible = "zmk,input-listener";
         status = "okay";
         device = <&glidepoint_split>;
         input-processors = <&zip_xy_scaler 75 100>;
         scroller {
-            layers = <4>;
+            // NAV layer — matches toucan_dongle.overlay (was mistakenly layer 4 here,
+            // which is GAME; dongle has always had this correctly on layer 3)
+            layers = <3>;
             input-processors = <
                 &zip_xy_to_scroll_mapper
                 &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
             >;
+        };
+        gaming {
+            // GAME layer — trackpad fully disabled, no accidental cursor/scroll/clicks
+            layers = <4>;
+            input-processors = <&input_drop>;
         };
     };
 };

@@ -25,6 +25,12 @@
         };
     };
 
+    input_drop: input_drop {
+        compatible = "zmk,input-processor-drop";
+        #input-processor-cells = <0>;
+        status = "okay";
+    };
+
     glidepoint_listener: glidepoint_listener {
         compatible = "zmk,input-listener";
         status = "okay";
@@ -37,6 +43,11 @@
                 &zip_scroll_transform INPUT_TRANSFORM_X_INVERT
                 &zip_scroll_scaler 1 2
             >;
+        };
+        gaming {
+            // GAME layer — trackpad fully disabled, no accidental cursor/scroll/clicks
+            layers = <4>;
+            input-processors = <&input_drop>;
         };
     };
 };
