@@ -13,8 +13,8 @@ All trackpad intelligence runs on the **right half (peripheral)**:
    - Applies virtual rotation (rotate-cdeg, Q8 sin/cos precomputed at init)
    - Tracks a 5-event velocity window (Q8 fixed-point, no float in hot path)
    - On touch start: submits `touch_start_work` to `gesture_work_q` (NOT the INPUT THREAD — avoids deep BLE call chain on INPUT THREAD stack), cancels inertial
-   - On touch end (20ms timeout): computes velocity, starts inertial if above threshold, releases touch key
-   - Inertial animation: 32ms timer, decays velocity, injects REL events via `input_report_rel()`
+   - On touch end (30ms timeout): computes velocity, starts inertial if above threshold, releases touch key
+   - Inertial animation: 10ms timer, decays velocity, injects REL events via `input_report_rel()`
    - Only non-zero REL pairs cross BLE — zero-delta frames dropped entirely
 
 2. `touch_kscan` (`zmk,kscan-touch-detect`) is a virtual kscan key at RC(3,9) wired into `kscan_composite`. Touch start/end from `periph_gesture` drives it. The key carries any ZMK behavior in the keymap.
@@ -28,7 +28,7 @@ The **central (left half or dongle)** receives only REL events and virtual key e
   - Dongle: `zip_scroll_scaler 1 2` (half speed)
   - (Left central's scroller was mistakenly on layer 4 — GAME — until it was fixed to match the dongle's layer 3; likely drifted when GAME was added/layers were reordered.)
 - On GAME layer (4): trackpad fully disabled via `zmk,input-processor-drop` (`input_drop` node, `zmk-input-gestures`) — zeroes movement/scroll/click events so nothing reaches HID. Touch key is bound to `&none` on this layer (was `&trans`, which fell through to BASE's `&touchpad 1 LCLK`).
-- Touch key in BASE layer = `&mo 1` (activates PAD layer for mouse buttons while touching)
+- Touch key in BASE layer = `&touchpad 1 LCLK`: a hold-tap (`hold-preferred`, `tapping-term-ms = 150`). Held past 150ms → `&mo 1` (PAD layer, mouse buttons on home row). Released sooner → left click. The hold-tap knows nothing about movement: any touch under 150ms clicks, even a quick swipe.
 
 ## Key files
 
@@ -38,7 +38,7 @@ The **central (left half or dongle)** receives only REL events and virtual key e
 - `boards/shields/toucan/toucan_left_central.conf` — left central Kconfig (stack sizes, smooth scrolling, BLE CI)
 - `boards/shields/toucan_dongle/toucan_dongle.overlay` — dongle input chain (scaler + scroller on layer 3 half-speed, drop on layer 4/GAME)
 - `boards/shields/toucan/toucan_layout.dtsi` — 43-key layout including virtual touch key at RC(3,9)
-- `config/toucan.keymap` — 43 bindings per layer; touch key = `&mo 1` in BASE, `&none` in GAME, `&trans` elsewhere
+- `config/toucan.keymap` — 43 bindings per layer; touch key = `&touchpad 1 LCLK` in BASE, `&none` in GAME, `&trans` elsewhere
 - `config/west.yml` — pulls in `zmk-input-gestures` from `mmzim05` remote
 
 ## Current tuning (`periph_gesture` on right half)
@@ -46,7 +46,7 @@ The **central (left half or dongle)** receives only REL events and virtual key e
 | Property | Value | Meaning |
 |---|---|---|
 | `max-delta` | 60 | Clamps per-poll jump glitches |
-| `touch-timeout-ms` | 20 | Ms silence → touch end (≥ 2× Cirque 10ms poll interval) |
+| `touch-timeout-ms` | 30 | Ms silence → touch end (≥ 2× Cirque 10ms poll interval). Was 20: one or two missed samples mid-drag split the touch |
 | `velocity-threshold` | 3 | 0.3 raw_px/ms — filters stationary lifts |
 | `decay-percent` | 6 | 6% speed lost per 10ms inertial frame — retuned for the 10ms tick (was 17%@32ms) to keep the same real-time glide feel |
 | `speed-scale` | 100 | Matches `zip_xy_scaler 75 100` numerator on central |
@@ -56,6 +56,18 @@ The **central (left half or dongle)** receives only REL events and virtual key e
 Inertial tick: always 10ms (100 Hz), matching the live Cirque poll rate — no slower post-lift rate. A prior tuning (`decay-percent`@17, tick halved to 32ms) traded cursor smoothness after lift for lower BLE notification rate, as a workaround for right-half crashes at range. That workaround is reverted: the crashes are the XIAO's weak stock antenna (see `docs/antenna-mod.md`), not something to fix by slowing the cursor. If range instability recurs, look at the antenna mod / RSSI logging, not the inertial tick.
 
 Scaler on central: `zip_xy_scaler 75 100` (applied to both cursor and inertial REL events).
+
+Cirque `glidepoint` node: `sensitivity = "1x"` (ADC attenuation; 1x = most sensitive, 4x = least).
+
+## Tap vs. drag
+
+The Cirque reports ABS only while Z > 0, so a light finger that loses contact for longer than `touch-timeout-ms` ends the touch. The leftover fragment is usually under the 150ms tapping term, so `&touchpad` fires a click mid-drag. Tuning against this, in order of effect:
+
+1. `sensitivity` on `glidepoint` (was `2x`, now `1x`): fewer Z dropouts during light contact.
+2. `touch-timeout-ms` (was 20, now 30): bridges one or two missed samples.
+3. `tapping-term-ms` on `touchpad` in `toucan.keymap` (150): lower means fewer accidental clicks but quicker taps needed.
+
+If accidental clicks persist, the real fix is movement-aware tap detection in `periph_gesture` (no click when the touch moved), since hold-tap cannot see movement.
 
 ## Stack configuration (right half)
 
@@ -87,6 +99,6 @@ Two independent power domains, both matter:
 1. Read this file and `CLAUDE.md` in `zmk-input-gestures`
 2. Gesture/tuning changes: edit `periph_gesture` node in `toucan_right.overlay`, commit + push
 3. Scaler/scroll changes: edit `toucan_left_central.overlay` and `toucan_dongle.overlay`
-4. Watch build: `gh run watch <run-id> --repo mmzim05/zmk-config-toucan --exit-status`
+4. Watch build (`gh` is not installed on `shire`; use the Actions page or install it): `gh run watch <run-id> --repo mmzim05/zmk-config-toucan --exit-status`
 5. Download: `gh run download <run-id> --repo mmzim05/zmk-config-toucan --dir ~/Downloads/firmware`
 6. Flash: right half always needs reflash for tuning changes; left central or dongle for central chain changes
