@@ -59,10 +59,10 @@
         BASE {
             display-name = "BASE";
             bindings = <
-&kp ESCAPE    &kp B  &kp L  &kp D          &kp C           &kp V                        &kp J        &kp Y        &kp O    &kp U             &kp COMMA  &kp BACKSLASH
-&kp LCTRL     &kp N  &kp R  &kp T          &kp S           &kp G                        &kp P        &kp H        &kp A    &kp E             &kp I      &kp MINUS
-&kp LEFT_ALT  &kp X  &kp Q  &kp M          &kp W           &kp Z                        &kp K        &kp F        &kp SQT  &kp SEMI          &kp DOT    &kp SLASH
-                            &kp BACKSPACE  &kp LEFT_SHIFT  &hold_preferred LWIN DELETE  &lt 3 ENTER  &lt 2 SPACE  &kp TAB  &touchpad 1 LCLK
+&balanced 1 ESCAPE  &kp B  &kp L  &kp D          &kp C           &kp V                        &kp J        &kp Y        &kp O    &kp U             &kp COMMA  &kp BACKSLASH
+&kp LCTRL           &kp N  &kp R  &kp T          &kp S           &kp G                        &kp P        &kp H        &kp A    &kp E             &kp I      &kp MINUS
+&kp LEFT_ALT        &kp X  &kp Q  &kp M          &kp W           &kp Z                        &kp K        &kp F        &kp SQT  &kp SEMI          &kp DOT    &kp SLASH
+                                  &kp BACKSPACE  &kp LEFT_SHIFT  &hold_preferred LWIN DELETE  &lt 3 ENTER  &lt 2 SPACE  &kp TAB  &touchpad 1 LCLK
             >;
         };
 
