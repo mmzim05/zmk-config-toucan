@@ -15,8 +15,13 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/usb.h>
 
 #include "battery.h"
+#include "battery_peripheral.h"
 #include "connection.h"
+#include "layer.h"
+#include "output.h"
+#include "profile.h"
 #include "sleep.h"
+#include "status_sync.h"
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -34,7 +39,15 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
     }
 
     draw_battery_status(canvas, state);
-    draw_connection_status(canvas, state);
+
+    if (state->connected && state->synced) {
+        draw_output_status(canvas, state);
+        draw_layer_status(canvas, state);
+        draw_profile_status(canvas, state);
+        draw_battery_peripheral_status(canvas, state);
+    } else {
+        draw_connection_status(canvas, state);
+    }
 }
 
 /**
@@ -82,6 +95,10 @@ ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 static void set_connection_status(struct zmk_widget_screen *widget,
                                   struct connection_status_state state) {
     widget->state.connected = state.connected;
+    if (!state.connected) {
+        // Drop the central's status until it pushes a fresh one
+        widget->state.synced = false;
+    }
 
     draw_top(widget->obj, widget->cbuf, &widget->state);
 }
@@ -104,6 +121,54 @@ ZMK_DISPLAY_WIDGET_LISTENER(widget_connection_status, struct connection_status_s
                             connection_status_update_cb, connection_status_get_state);
 
 ZMK_SUBSCRIPTION(widget_connection_status, zmk_split_peripheral_status_changed);
+
+/**
+ * Status pushed from the central (layer, host connection, other half's battery)
+ **/
+
+struct status_sync_state {
+    bool valid;
+    struct status_sync_payload payload;
+};
+
+static void set_status_sync(struct zmk_widget_screen *widget, struct status_sync_state state) {
+    if (!state.valid) {
+        return;
+    }
+
+    const struct status_sync_payload *p = &state.payload;
+    widget->state.synced = true;
+    widget->state.layer_id = p->layer_id;
+    widget->state.battery_p = p->peer_battery;
+    widget->state.selected_endpoint = (struct zmk_endpoint_instance){
+        .transport = p->usb ? ZMK_TRANSPORT_USB : ZMK_TRANSPORT_BLE,
+        .ble = {.profile_index = p->profile_index},
+    };
+    widget->state.active_profile_index = p->profile_index;
+    widget->state.active_profile_connected = p->profile_connected;
+    widget->state.active_profile_bonded = p->profile_bonded;
+
+    draw_top(widget->obj, widget->cbuf, &widget->state);
+}
+
+static void status_sync_update_cb(struct status_sync_state state) {
+    struct zmk_widget_screen *widget;
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_status_sync(widget, state); }
+}
+
+static struct status_sync_state status_sync_get_state(const zmk_event_t *eh) {
+    const struct zmk_status_sync_changed *ev = as_zmk_status_sync_changed(eh);
+
+    return (struct status_sync_state){
+        .valid = ev != NULL,
+        .payload = (ev != NULL) ? ev->payload : (struct status_sync_payload){0},
+    };
+}
+
+ZMK_DISPLAY_WIDGET_LISTENER(widget_status_sync, struct status_sync_state, status_sync_update_cb,
+                            status_sync_get_state);
+
+ZMK_SUBSCRIPTION(widget_status_sync, zmk_status_sync_changed);
 
 /**
  * Activity state handling for sleep screen
@@ -158,6 +223,7 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
     widget_connection_status_init();
+    widget_status_sync_init();
 
     return 0;
 }

@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT
+
+description: |
+  Receives status pushed from the split central (layer, host connection, other
+  half's battery) for a peripheral's display. Invoked by the central only;
+  never bind it in a keymap. See include/toucan/status_sync.h.
+
+compatible: "zmk,behavior-status-sync"
+
+include: zero_param.yaml

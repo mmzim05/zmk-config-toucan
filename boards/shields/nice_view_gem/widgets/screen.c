@@ -136,7 +136,7 @@ ZMK_SUBSCRIPTION(widget_battery_peripheral_status, zmk_peripheral_battery_state_
  **/
 
 static void set_layer_status(struct zmk_widget_screen *widget, struct layer_status_state state) {
-    widget->state.layer_index = zmk_keymap_highest_layer_active();
+    widget->state.layer_id = zmk_keymap_layer_index_to_id(zmk_keymap_highest_layer_active());
     draw_top(widget->obj, widget->cbuf3, &widget->state);
 }
 

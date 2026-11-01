@@ -18,15 +18,14 @@ struct status_state {
     uint8_t battery_p;
     bool charging;
     bool charging_p;
-#if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
     struct zmk_endpoint_instance selected_endpoint;
     int active_profile_index;
     bool active_profile_connected;
     bool active_profile_bonded;
-    uint8_t layer_index;
-    const char *layer_label;
-#else
-    bool connected;
+    uint8_t layer_id;
+#if IS_ENABLED(CONFIG_ZMK_SPLIT) && !IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
+    bool connected; // link to the central
+    bool synced;    // status above received from the central since the link came up
 #endif
 };
 

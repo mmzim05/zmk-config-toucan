@@ -90,6 +90,29 @@ Two independent power domains, both matter:
 - **Cirque chip scan**: without chip-level power management the Pinnacle scans at its native ~100Hz continuously any time the MCU is awake, whether or not you're touching it — datasheet-rated ~2.9mA active vs ~40µA asleep, so this can dominate battery life on its own. `CONFIG_ZMK_INPUT_PINNACLE_IDLE_SLEEPER` + `sleep;` on the `glidepoint` node (`toucan_right.overlay`) would put the chip itself to sleep (`zmk_pinnacle_idle_sleeper.c` in `cirque-input-module` flips it on after `CONFIG_ZMK_IDLE_TIMEOUT`, 30s). **Tried and reverted**: once asleep, the chip's own Sleep Interval register (hardcoded to 255 in `input_pinnacle.c`'s init, not exposed via Kconfig/DT) governs how often it wakes to check for a touch, not a flat ~300ms — a touch landing between checks is missed, so in practice it took several seconds of moving a finger around before the cursor responded. Left disabled (commented out in both files) in favor of just the MCU-level deep sleep below, which has no responsiveness cost. Revisiting this would mean forking `cirque-input-module` to make the Sleep Interval short/configurable.
 - **`CONFIG_ZMK_HEARTBEAT_LED`** (`toucan_right.conf`, currently off) — 1Hz blink on `led0`. Used to confirm the `kscan_composite` wakeup-source fix on real hardware: LED went dark at the 5:30 deep-sleep mark and resumed on a real keypress. Re-enable if the right half goes unresponsive again — whether the LED is still blinking tells you if it's a hang past init vs. the MCU not coming back up at all.
 
+## Left display with the dongle (status sync)
+
+As a peripheral, the left half has no layer, host-connection or right-battery state; only the central does. The dongle pushes it over the split link:
+
+- `boards/shields/toucan_dongle/status_sync_central.c` — on layer / endpoint / BLE profile / peripheral battery events (20ms debounce) plus a 5s refresh, calls `zmk_split_central_invoke_behavior()` on each peripheral with the state packed into param1. Each peripheral gets the *other* peripheral's battery, so the dongle doesn't need to know which source is left.
+- `include/toucan/status_sync.h` — the param1 encoding, shared by both sides.
+- `boards/shields/nice_view_gem/widgets/behavior_status_sync.c` — `status_sync` behavior node (in `nice_view_gem.overlay`, binding in `dts/bindings/`, found via `dts_root` in `zephyr/module.yml`). Raises `zmk_status_sync_changed`; `screen_peripheral.c` renders it with the same widgets as the central screen. Layer names on the peripheral come from the keymap devicetree (`layer.c`).
+- While the link is down, or before the first push, the screen shows `NO LINK` / `DONGLE` instead of stale data. The right half also receives the pushes, has no `status_sync` behavior and just logs an error.
+
+## Local builds
+
+`~/Dev/github/toucan/.zmk-build` is a west workspace (from `config/west.yml`) built with the `zmkfirmware/zmk-build-arm:stable` docker image. `build.sh` builds this repo in place:
+
+```sh
+cd ~/Dev/github/toucan/.zmk-build
+./build.sh left_periph "toucan_left rgbled_adapter nice_view_gem"
+./build.sh right "toucan_right rgbled_adapter"
+CMAKE_ARGS=-DCONFIG_ZMK_STUDIO=y ./build.sh dongle toucan_dongle -S studio-rpc-usb-uart
+./build.sh left_central "toucan_left toucan_left_central rgbled_adapter nice_view_gem"
+```
+
+Output: `build/<name>/zephyr/zmk.uf2`. Run `west update` in the container after changing `west.yml`. The workspace pulls `zmk-input-gestures` from GitHub, not the local checkout.
+
 ## Workflow
 
 **Always commit and push after every change.** GitHub Actions builds on push.

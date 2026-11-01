@@ -19,4 +19,13 @@
     chosen {
         zephyr,display = &nice_view;
     };
+
+    // Receives layer/host/battery status from the central (dongle) on a
+    // peripheral. Node name must match STATUS_SYNC_BEHAVIOR_NAME.
+    behaviors {
+        status_sync: status_sync {
+            compatible = "zmk,behavior-status-sync";
+            #binding-cells = <0>;
+        };
+    };
 };
