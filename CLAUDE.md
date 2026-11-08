@@ -102,3 +102,11 @@ Two independent power domains, both matter:
 4. Watch build (`gh` is not installed on `shire`; use the Actions page or install it): `gh run watch <run-id> --repo mmzim05/zmk-config-toucan --exit-status`
 5. Download: `gh run download <run-id> --repo mmzim05/zmk-config-toucan --dir ~/Downloads/firmware`
 6. Flash: right half always needs reflash for tuning changes; left central or dongle for central chain changes
+
+## Battery relay (left half display shows right half's battery in dongle mode)
+
+Split peripherals only talk to the central, so with the dongle the left half can't read the right half's battery on its own. The dongle relays it:
+
+- `boards/shields/toucan_dongle/battery_relay.c` — listens to `zmk_peripheral_battery_state_changed`, caches each half's level, and 3s later (debounced; also covers reconnects, since the central reads a peripheral's battery right after it connects) invokes the `bat_rly` behavior on every *other* peripheral via `zmk_split_central_invoke_behavior()` with `param1` = level. The right half has no `bat_rly`, so invokes to it just log a failure.
+- `boards/shields/nice_view_gem/widgets/battery_relay.c` + `bat_rly` node in `nice_view_gem.overlay` — peripheral-side behavior; re-raises the level locally as `zmk_peripheral_battery_state_changed`, which `screen_peripheral.c` draws at x=80 (same spot as the central screen). Node name must stay ≤ 8 chars (`ZMK_SPLIT_RUN_BEHAVIOR_DEV_LEN`).
+- Needs both `toucan_dongle` and `toucan_left_peripheral` flashed.

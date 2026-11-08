@@ -1,0 +1,3 @@
+if(CONFIG_ZMK_SPLIT_ROLE_CENTRAL AND CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
+  zephyr_library_sources(battery_relay.c)
+endif()

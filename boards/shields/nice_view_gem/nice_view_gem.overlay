@@ -20,3 +20,14 @@
         zephyr,display = &nice_view;
     };
 };
+
+/ {
+    behaviors {
+        // Node name is the behavior device name the dongle invokes over split;
+        // must stay <= 8 chars (ZMK_SPLIT_RUN_BEHAVIOR_DEV_LEN - 1).
+        bat_rly: bat_rly {
+            compatible = "zmk,behavior-battery-relay";
+            #binding-cells = <1>;
+        };
+    };
+};

@@ -1,0 +1,7 @@
+# Receives another split half's battery level, relayed by the central (dongle).
+# Only invoked remotely by toucan_dongle/battery_relay.c, never bound in a keymap.
+description: Battery level relayed from the split central
+
+compatible: "zmk,behavior-battery-relay"
+
+include: one_param.yaml

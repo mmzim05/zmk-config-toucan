@@ -15,6 +15,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/usb.h>
 
 #include "battery.h"
+#include "battery_peripheral.h"
 #include "connection.h"
 #include "sleep.h"
 
@@ -34,6 +35,7 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
     }
 
     draw_battery_status(canvas, state);
+    draw_battery_peripheral_status(canvas, state);
     draw_connection_status(canvas, state);
 }
 
@@ -74,6 +76,36 @@ ZMK_SUBSCRIPTION(widget_battery_status, zmk_battery_state_changed);
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
 ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
+
+/**
+ * Other half's battery, relayed by the dongle (see battery_relay.c)
+ **/
+
+static void set_battery_peripheral_status(struct zmk_widget_screen *widget, uint8_t level) {
+    widget->state.battery_p = level;
+
+    draw_top(widget->obj, widget->cbuf, &widget->state);
+}
+
+static void battery_peripheral_status_update_cb(uint8_t level) {
+    struct zmk_widget_screen *widget;
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
+        set_battery_peripheral_status(widget, level);
+    }
+}
+
+static uint8_t battery_peripheral_status_get_state(const zmk_event_t *eh) {
+    const struct zmk_peripheral_battery_state_changed *ev =
+        as_zmk_peripheral_battery_state_changed(eh);
+
+    return (ev != NULL) ? ev->state_of_charge : 0;
+}
+
+ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_peripheral_status, uint8_t,
+                            battery_peripheral_status_update_cb,
+                            battery_peripheral_status_get_state);
+
+ZMK_SUBSCRIPTION(widget_battery_peripheral_status, zmk_peripheral_battery_state_changed);
 
 /**
  * Connection status (link to the dongle)
@@ -157,6 +189,7 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
 
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
+    widget_battery_peripheral_status_init();
     widget_connection_status_init();
 
     return 0;
